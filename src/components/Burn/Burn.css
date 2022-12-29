@@ -1,0 +1,19 @@
+.burn-body {
+    margin: 0;
+    margin-bottom: 5rem;
+}
+
+.burn-img {
+    width: 40vw;
+    border-radius: 5rem;
+}
+
+.alert {
+    color: crimson;
+}
+
+.burn-atoms-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

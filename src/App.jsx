@@ -4,6 +4,9 @@ import { ethers } from 'ethers';
 import Header from './components/Header/Header';
 import Home from './components/Home/Home';
 import Body from './components/Body/Body';
+import Burn from './components/Burn/Burn';
+import About from './components/About/About';
+
 import atom_abi from './atom_erc20.json';
 
 function App() {
@@ -136,11 +139,27 @@ function App() {
         return true;
     }
 
+    async function BurnAtoms(value) {
+        if(connectionStatus !== "Connected")
+        {
+            //setError - todo
+            return false;
+        }
+
+        let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
+
+        await contract.burnElectrons(value);
+
+        return true;
+    }
+
     return (
         <div>
             <Header connectionStatus={connectionStatus} connect={connetWallet} />
             <Home mintAtoms={MintAtoms} />
             <Body allowedAmount={thirdPartyAllowedAmount} thirdPartyTransaction={ThirdPartyTransaction} allowance={Allowance} approve={Approve} transfer={Transfer} />
+            <Burn burn={BurnAtoms} />
+            <About />
         </div>
     );
 }
