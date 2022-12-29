@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 
 import Header from './components/Header/Header';
 import Home from './components/Home/Home';
+import Body from './components/Body/Body';
 import atom_abi from './atom_erc20.json';
 
 function App() {
@@ -61,15 +62,77 @@ function App() {
         let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
 
         value = "" + value;
-        await contract.mintAtoms({value : ethers.utils.parseEther(value)});
+        let transactionStatus = await contract.mintAtoms({value : ethers.utils.parseEther(value)});
+        await transactionStatus.wait(1);
+
         return true;
     }
+
+    async function Transfer(to_address, value) {
+        if(connectionStatus !== "Connected")
+        {
+            //setError - todo
+            return false;
+        }
+
+        let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
+        await contract.transfer(to_address, value);
         
+        return true;
+    }
+
+    async function Approve(partyAddress, value) {
+        if(connectionStatus !== "Connected")
+        {
+            //setError - todo
+            return false;
+        }
+
+        let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
+        await contract.approve(partyAddress, value);
+
+        return true;
+    }
+    
+    async function Allowance(partyAddress) {
+        if(connectionStatus !== "Connected")
+        {
+            //setError - todo
+            return false;
+        }
+
+        let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
+
+        let ownerAddress;
+        await window.ethereum.request({method : 'eth_requestAccounts'})
+          .then( result => { ownerAddress = result[0] });
+        
+        console.log(ownerAddress);
+
+        let allowedAmount = await contract.allowance(ownerAddress, partyAddress);
+
+        return allowedAmount;
+    }
+
+    async function ThirdPartyTransaction(fromAddress, toAddress, value) {
+        if(connectionStatus !== "Connected")
+        {
+            //setError - todo
+            return false;
+        }
+
+        let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
+
+        contract.transferFrom(fromAddress, toAddress, value);
+
+        return true;
+    }
 
     return (
         <div>
             <Header connectionStatus={connectionStatus} connect={connetWallet} />
             <Home mintAtoms={MintAtoms} />
+            <Body thirdPartyTransaction={ThirdPartyTransaction} allowance={Allowance} approve={Approve} transfer={Transfer} />
         </div>
     );
 }

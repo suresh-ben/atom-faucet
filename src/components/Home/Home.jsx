@@ -23,6 +23,7 @@ function Home(props) {
                     SetMintStatus("Please connect wallet before minting atoms");
                 }
                 else {
+
                     SetMintStatusStyle({color : "green"});
                     SetMintStatus("minted " + event.target.atoms.value + "into your wallet");
                 }  
@@ -60,11 +61,11 @@ function Home(props) {
                     <br/><br/><br/>
                     
                     <form onSubmit={MintAtoms}>
-                        <input id="atoms" placeholder="Number of atoms to mint" type="number" /><br/>
+                        <input id="atoms" placeholder="Number of atoms to mint" type="number" required min="0.01" step="0.001"/><br/>
                         <p style={mintStatusStyle}>
                             {mintStatus}
                         </p>
-                        <br/><br/>
+                        <br/>
                         <button type="submit"> Mint atoms </button>
                     </form>
 

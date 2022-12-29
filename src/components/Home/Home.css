@@ -2,7 +2,14 @@
 .home-body {
     height: calc(100vh - 10rem);
     color: white;
-    display: flex;
+    padding: 0 3rem;
+    margin: 0;
+}
+
+@media only screen and (max-width: 600px) {
+    .home-body {
+        height: auto;
+    }
 }
 
 .home-parts {
@@ -21,7 +28,7 @@
     font-weight: bold;
 }
 
-.home-parts input {
+input {
     border-radius: 5px;
     padding: 0 20px;
     width: 250px;

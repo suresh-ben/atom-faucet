@@ -1,0 +1,9 @@
+.atom-body {
+    margin: 0 5rem;
+    color: white;
+}
+
+hr {
+    margin: 10vh;
+    border-top: 3px solid white;
+}
