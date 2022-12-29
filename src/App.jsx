@@ -94,6 +94,7 @@ function App() {
         return true;
     }
     
+    const [ thirdPartyAllowedAmount, SetallowedAmount ] = useState("_");
     async function Allowance(partyAddress) {
         if(connectionStatus !== "Connected")
         {
@@ -105,13 +106,20 @@ function App() {
 
         let ownerAddress;
         await window.ethereum.request({method : 'eth_requestAccounts'})
-          .then( result => { ownerAddress = result[0] });
+          .then( result => { 
+            ownerAddress = result[0] + "";
+            console.log(ownerAddress);
+
+            (async () => {
+                let allowedAmount = await contract.allowance(ownerAddress, partyAddress);
+                allowedAmount = allowedAmount.toString() + "";
+                allowedAmount = Number(allowedAmount);
+                allowedAmount /= 1000;
+                SetallowedAmount(allowedAmount);
+            })();
+        });
         
-        console.log(ownerAddress);
-
-        let allowedAmount = await contract.allowance(ownerAddress, partyAddress);
-
-        return allowedAmount;
+        return true;
     }
 
     async function ThirdPartyTransaction(fromAddress, toAddress, value) {
@@ -132,7 +140,7 @@ function App() {
         <div>
             <Header connectionStatus={connectionStatus} connect={connetWallet} />
             <Home mintAtoms={MintAtoms} />
-            <Body thirdPartyTransaction={ThirdPartyTransaction} allowance={Allowance} approve={Approve} transfer={Transfer} />
+            <Body allowedAmount={thirdPartyAllowedAmount} thirdPartyTransaction={ThirdPartyTransaction} allowance={Allowance} approve={Approve} transfer={Transfer} />
         </div>
     );
 }

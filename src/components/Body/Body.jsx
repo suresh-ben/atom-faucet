@@ -26,14 +26,12 @@ function Body(props) {
         props.approve(partyAddress, value);
     }
 
-    const [ allowedAmount, SetAllowedAmount ] = useState("");
     function Allowance(event) {
         event.preventDefault();
 
         let partyAddress = event.target.partyAddress.value;
 
-        let tempAllowedAmount = props.allowance(partyAddress);
-        SetAllowedAmount(tempAllowedAmount);
+        props.allowance(partyAddress);
     }
 
     function ThirdPartyTransaction(event) {
@@ -57,6 +55,8 @@ function Body(props) {
                     <h2>
                         Transfer your atoms
                     </h2>
+
+                    <br /><br /><br /><br />
 
                     <form onSubmit={Transfer}>
                         <input placeholder="Number of atoms" type="number" id="transferAtoms" required min="0.01" step="0.001" /><br /><br />
@@ -100,7 +100,7 @@ function Body(props) {
                         <form onSubmit={Allowance} >
                             <input placeholder="Address of third party" type="text" id="partyAddress" /><br /><br />
                             <p>
-                                Allowed amount to this address is : {allowedAmount}
+                                Allowed amount to this address is : {props.allowedAmount} atoms
                             </p>
 
                             <button type="submit" >
