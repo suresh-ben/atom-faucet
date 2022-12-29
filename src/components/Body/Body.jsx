@@ -65,6 +65,7 @@ function Body(props) {
                         <button type="submit">
                             Transfer atoms
                         </button>
+                        <p style={props.transferMessageStyle} > {props.transferMessage} </p>
                     </form>
 
                 </div>
@@ -87,6 +88,7 @@ function Body(props) {
                             <button type="submit" >
                                 Approve third Party
                             </button>
+                            <p style={props.approveMessageStyle} > {props.approveMessage} </p>
                         </form>
                     </div>
 
@@ -106,6 +108,7 @@ function Body(props) {
                             <button type="submit" >
                                 Check Approved atoms
                             </button>
+                            <p style={{color : "red"}} > {props.allowanceError} </p>
                         </form>
                     </div>
 
@@ -125,6 +128,7 @@ function Body(props) {
                             <button type="submit">
                                 Do Transaction
                             </button>
+                            <p style={props.thirdPartyMessageStyle} > {props.thirdPartyMessage} </p>
                         </form>
 
                     </div>

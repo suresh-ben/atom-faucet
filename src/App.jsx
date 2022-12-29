@@ -15,13 +15,11 @@ function App() {
     const [ connectionStatus, SetConnectionStatus ] = useState("connect wallet");
     const [ connectionError, SetConnectionError ] = useState("");
 
-    const [ provider, SetProvider ] = useState();
     const [ signer, SetSigner ] = useState();
 
     async function ConnectEthers() {
 
         let tempProvider = await  new ethers.providers.Web3Provider(window.ethereum);
-        SetProvider(tempProvider);
 
         //To verify connection
         await window.ethereum.request({method : 'eth_requestAccounts'})
@@ -71,37 +69,56 @@ function App() {
         return true;
     }
 
+    const [ transferMessage, SetTransferMessage ] = useState("");
+    const [ transferMessageStyle, SetTransferMessageStyle ] = useState({});
     async function Transfer(to_address, value) {
+        SetTransferMessage("connecting...!!!");
+        SetTransferMessageStyle({color : "white"});
+
         if(connectionStatus !== "Connected")
         {
-            //setError - todo
+            SetTransferMessage("Please connect wallet");
+            SetTransferMessageStyle({color : "red"});
             return false;
         }
 
         let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
         await contract.transfer(to_address, value);
         
+        SetTransferMessage("Transfer successful...!!!");
+        SetTransferMessageStyle({color : "green"});
+
         return true;
     }
 
+
+    const [ approveMessage, SetApproveMessage ] = useState("");
+    const [ approveMessageStyle, SetApproveMessageStyle ] = useState({});
     async function Approve(partyAddress, value) {
+        SetApproveMessage("connecting...");
+        SetApproveMessageStyle({color : "white"});
+
         if(connectionStatus !== "Connected")
         {
-            //setError - todo
+            SetApproveMessage("please connect wallet...!!!");
+            SetApproveMessageStyle({color : "red"});
             return false;
         }
 
         let contract = await new ethers.Contract(contactAddress, atom_abi, signer);
         await contract.approve(partyAddress, value);
-
+        
+        SetApproveMessage("Approved !!!");
+        SetApproveMessageStyle({color : "green"});
         return true;
     }
     
     const [ thirdPartyAllowedAmount, SetallowedAmount ] = useState("_");
+    const [ allowanceError, SetAllowanceError ] = useState("");
     async function Allowance(partyAddress) {
         if(connectionStatus !== "Connected")
         {
-            //setError - todo
+            SetAllowanceError("please connect wallet");
             return false;
         }
 
@@ -125,10 +142,16 @@ function App() {
         return true;
     }
 
+    const [thirdPartyMessage, SetThirdPartyMessage ] = useState("");
+    const [thirdPartyMessageStyle, SetThirdPartyMessageStyle ] = useState({});
     async function ThirdPartyTransaction(fromAddress, toAddress, value) {
+        SetThirdPartyMessage("connecting...!!!");
+        SetThirdPartyMessageStyle({color : "white"});
+
         if(connectionStatus !== "Connected")
         {
-            //setError - todo
+            SetThirdPartyMessage("Please connect wallet");
+            SetThirdPartyMessageStyle({color : "red"});
             return false;
         }
 
@@ -136,13 +159,21 @@ function App() {
 
         contract.transferFrom(fromAddress, toAddress, value);
 
+        SetThirdPartyMessage("Transaction successfull...");
+        SetThirdPartyMessageStyle({color : "green"});
         return true;
     }
 
+    const [ burnMessage, SetBurnMessage ] = useState("");
+    const [ burnMessageStyle, SetBurnMessageStyle ] = useState({});
     async function BurnAtoms(value) {
+        SetBurnMessage("connecting...!!!");
+        SetBurnMessageStyle({color : "white"});
+
         if(connectionStatus !== "Connected")
         {
-            //setError - todo
+            SetBurnMessage("please connect wallet !!!");
+            SetBurnMessageStyle({color : "red"});
             return false;
         }
 
@@ -150,15 +181,25 @@ function App() {
 
         await contract.burnElectrons(value);
 
+        SetBurnMessage("Successufully burned atoms !!!");
+        SetBurnMessageStyle({color : "green"});
         return true;
     }
 
     return (
         <div>
             <Header connectionStatus={connectionStatus} connect={connetWallet} />
+            <center style={{ color : "red" }} >{connectionError}</center>
             <Home mintAtoms={MintAtoms} />
-            <Body allowedAmount={thirdPartyAllowedAmount} thirdPartyTransaction={ThirdPartyTransaction} allowance={Allowance} approve={Approve} transfer={Transfer} />
-            <Burn burn={BurnAtoms} />
+
+            <Body 
+                thirdPartyTransaction={ThirdPartyTransaction} thirdPartyMessage={thirdPartyMessage} thirdPartyMessageStyle={thirdPartyMessageStyle}
+                allowance={Allowance} allowedAmount={thirdPartyAllowedAmount} allowanceError={allowanceError}
+                approve={Approve} approveMessage={approveMessage} approveMessageStyle={approveMessageStyle}
+                transfer={Transfer} transferMessage={transferMessage} transferMessageStyle={transferMessageStyle}
+            />
+
+            <Burn burn={BurnAtoms} burnMessage={burnMessage} burnMessageStyle={burnMessageStyle} />
             <About />
         </div>
     );

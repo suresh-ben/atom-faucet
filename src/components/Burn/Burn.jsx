@@ -18,7 +18,7 @@ function Burn(props) {
         <div className="burn-body row">
             <div className="col-lg-6 col-md-6 col-sm-12">
                 <center>
-                    <img className="burn-img" src={burnImage} alt="Buring image" />
+                    <img className="burn-img" src={burnImage} alt="Buring atom" />
                 </center>
             </div>
 
@@ -34,6 +34,7 @@ function Burn(props) {
                         <button type="submit">
                             Burn atoms
                         </button>
+                        <p style={props.burnMessageStyle} > {props.burnMessage} </p>
                     </form>
                 </center>
             </div>
