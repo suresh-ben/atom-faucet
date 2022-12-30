@@ -17,3 +17,15 @@
     align-items: center;
     justify-content: center;
 }
+
+::-webkit-scrollbar {
+    background-color: #144272;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #2C74B3;
+}
+
+::-webkit-scrollbar-button {
+    background-color: #BFEAF5;
+}
